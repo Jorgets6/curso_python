@@ -20,7 +20,7 @@ def carga_plantillas(nombre_plantilla:str)->dict:
     '''
     plantillas = {}
     for i in range(6):
-        plantillas[i] = carga_archivo_texto(f'./plantillas/{nombre_plantilla}-{i}.txt')
+        plantillas[i] = carga_archivo_texto(f'./plantillas/{nombre_plantilla}_{i}.txt')
     return plantillas
 
 def despliega_plantilla(diccionario:dict, nivel:int):
