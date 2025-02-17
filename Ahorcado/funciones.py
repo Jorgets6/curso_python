@@ -1,3 +1,4 @@
+
 '''
 funciones auxiliares del juego Ahorcado
 '''
@@ -19,7 +20,7 @@ def carga_plantillas(nombre_plantilla:str)->dict:
     '''
     plantillas = {}
     for i in range(6):
-        plantillas[i] = carga_archivo_texto(f'./plantillas/{nombre_plantilla}_{i}.txt')
+        plantillas[i] = carga_archivo_texto(f'./plantillas/{nombre_plantilla}-{i}.txt')
     return plantillas
 
 def despliega_plantilla(diccionario:dict, nivel:int):
@@ -37,18 +38,18 @@ def obten_palabras(lista:list)->list:
     '''
     texto = ' '.join(lista[120:])
     palabras = texto.split()
-    # convertimos a minusculas.
+    # convertimos a minusculas
     minusculas = [palabra.lower() for palabra in palabras]
     set_palabras = set(minusculas)
-    # removemos signos de puntuación y caracteres especiales.
+    # removemos signos de puntuación y caracteres especiales
     set_palabras = {palabra.strip(string.punctuation) for palabra in set_palabras}
-    # removemos números, paréntesis, corchetes y otros caracteres.
+    # removemos números, paréntesis, corchetes y otros caracteres
     set_palabras = {palabra for palabra in set_palabras if palabra.isalpha()}
-    # removemos acentos.
+    # removemos acentos
     set_palabras = {unicodedata.normalize('NFKD', palabra).encode('ascii', 'ignore').decode('ascii') for palabra in set_palabras}
     return list(set_palabras)
 
-def adivina_letra(abc:dict, palabra:str,letras_adivinadas:set,turnos:int):
+def adivina_letra(abc:dict, palabra:str, letras_adivinadas:set, turnos:int)->int:
     '''
     Adivina una letra de una palabra
     '''
@@ -59,21 +60,21 @@ def adivina_letra(abc:dict, palabra:str,letras_adivinadas:set,turnos:int):
         else:
             palabra_oculta += "_"
     print(f'Tienes {turnos} oportunidades de fallar')
-    print(f'El abecedario es: {abc}')
-    print(f'Palabra oculta: {palabra_oculta}')
+    abcd = ' '.join(abc.values())
+    print(f'El abecedario es: {abcd}')
+    print(f'La palabra es: {palabra_oculta}')
     letra = input('Ingresa una letra: ')
     letra = letra.lower()
     if letra in abc:
         if abc[letra] == "*":
             print('Ya adivinaste esa letra')
         else:
-            abc[letra] = "*"
+            abc[letra]= "*"
             if letra in palabra:
-               letras_adivinadas.add(letra)
+                letras_adivinadas.add(letra)
             else:
                 turnos -= 1
-    
-    
+    return turnos
 
 if __name__ == '__main__':
     plantillas = carga_plantillas('plantilla')
@@ -85,9 +86,8 @@ if __name__ == '__main__':
     print(p)
     abcdario = {letra:letra for letra in string.ascii_lowercase}
     adivinadas = set()
-    t = 5 #oportunidades
-    adivina_letra(abcdario, p, adivinadas, t)
-    adivina_letra(abcdario, p, adivinadas, t)
-    
-        
-        
+    t = 5 # oportunidades
+    t = adivina_letra(abcdario, p, adivinadas, t)
+    print(t)
+    t = adivina_letra(abcdario, p, adivinadas, t)
+    print(t)
