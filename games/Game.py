@@ -57,7 +57,7 @@ if __name__ == "__main__":
     print("-------------------")
     print(repr(game))
     print(game.to_json())
-    filename_json: "game.json"
+    filename_json = "game.json"
     with open(filename_json, "w", encoding="utf8") as f:
-        
-        file.write(game.to_json())
+        f.write(str(game.to_json()))
+    print(f"Archivo{filename_json} guardado con éxito!")
