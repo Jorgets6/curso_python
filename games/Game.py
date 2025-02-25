@@ -1,7 +1,14 @@
+'''
+Con un vasito en la mano 
+El cuerpo siento cansado
+Fumando voy relajado
+'''
+
 from random import choice
 from Athlete import Athlete
 from Sport import Sport
 from team import Team
+import json
 
 class Game:
     ''' Clase Game: Juego entre dos equipos'''
@@ -9,12 +16,13 @@ class Game:
             'LMP': [x for x in range(0, 11)],
             'NBA': [x for x in range(50, 150)],
             'NFL': [x for x in range(0, 20)],
-            'MLX': [x for x in range(0, 10)]
+            'MLX': [x for x in range(0, 10)],
+            'FIFA': [x for x in range(0, 10)]
         }
     def __init__(self, A: True, B: True):
         ''' Constructor de la clase'''
         self.A = A
-        self.B = B
+        self.B = B                           
         self.score = dict()
         self.score[A.name] = 0
         self.score[B.name] = 0
@@ -58,6 +66,10 @@ if __name__ == "__main__":
     print(repr(game))
     print(game.to_json())
     filename_json = "game.json"
-    with open(filename_json, "w", encoding="utf8") as f:
-        f.write(str(game.to_json()))
+    with open(filename_json, "w", encoding='utf8') as f:
+        json.dump(game.to_json(), f, ensure_ascii=False, indent=4)
     print(f"Archivo{filename_json} guardado con éxito!")
+    
+    
+    
+    
