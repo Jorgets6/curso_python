@@ -39,7 +39,7 @@ class Game:
         
     def __str__(self):
         ''' Metodo para representar la clase como string'''
-        return f"Game: {self.A.name}: {self.score[self.A.name]} - {self.score[self.A.name]}: {self.B.name}"
+        return f"Game: {self.A.name}: {self.score[self.A.name]} - {self.score[self.B.name]}: {self.B.name}"
     
     def __repr__(self):
         ''' Metodo para representar la clase como string'''
