@@ -1,26 +1,30 @@
-''' Archivo con las fnciones necesarias de la aplicacion libro web '''
+''' Archivo con las funciones necesarias de la Aplicación Libro Web'''
 import csv
 
-def lee_archivo_csv(archivo:str) -> list:
-    ''' Lee un archivo CSV y la convierte e una lista de diccionarios '''
-    with open(archivo, 'r', encoding='utf-8') as f:
+def lee_archivo_csv(archivo:str)->list:
+    ''' Lee un archivo CSV y lo convierte en una lista de diccionarios '''
+    with open(archivo, "r", encoding='utf8') as f:
         return [x for x in csv.DictReader(f)]
-    
-def crea_diccionario_titulo(lista:list) -> dict:
-    ''' Crea un diccionario con los títulos de los libros como llave y el resto de los datos como valor '''
-    return {x['title']:x for x in lista}
 
-def busca_en_titulo(diccionario, palabra)->list:
+def crea_diccionario(lista:list, llave:str)->dict:
+    ''' Crea un diccionario con los títulos como clave y el resto de los datos como valores '''
+    return {x[llave]: x for x in lista}
+
+def busca_en_diccionario(diccionario:dict, palabra:str)->list:
     ''' Busca palabra en titulo de la lista de diccionarios '''
     lista = []
-    for titulo, libro in diccionario.items():
-        if 'wars' in titulo.lower():
+    palabra = palabra.lower()
+    for llave, libro in diccionario.items():
+        if palabra in llave.lower():
             lista.append(libro)
     return lista
 
 if __name__ == '__main__':
     archivo_csv = 'booklist2000.csv'
     lista_libros = lee_archivo_csv(archivo_csv)
-    diccionario_libros = crea_diccionario_titulo(lista_libros)
-    resultado = busca_en_titulo(diccionario_libros, 'wars')
+    diccionario_libros = crea_diccionario(lista_libros, "title")
+    resultado = busca_en_diccionario(diccionario_libros, 'rebels')
+    print(resultado)
+    diciconario_autores = crea_diccionario(lista_libros, "author")
+    resultado = busca_en_diccionario(diciconario_autores, 'sandra')
     print(resultado)
