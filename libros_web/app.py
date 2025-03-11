@@ -34,6 +34,18 @@ def libro(id:str):
         return render_template('libro.html', libro=libro)
     else:
         return render_template('libro.html', libro=None)
+
+@app.route('/letra/', methods =['GET'])
+def plantilla_letra():
+    ''' Página de búsqueda por letra'''
+    return render_template('letra.html', lista_libros = [])
+
+@app.route('/letra/<letra>', methods =['GET'])
+def busqueda_letra(letra:str):
+    ''' Página de búsqueda por letra'''
+    resultado = fn.libros_empiezan_con(lista_libros, letra)
+    return render_template('letra.html', lista_libros = resultado)
+    
     
 if __name__ == '__main__':
     app.run(debug=True)
