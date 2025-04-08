@@ -72,27 +72,54 @@ def logout():
     flash('Has cerrado sesión correctamente', 'info')
     return redirect(url_for('index'))
 
-@app.route('/agregar_relacion', methods=['GET'])
+@app.route('/agregar_relacion', methods=['GET','POST'])
 def agregar_relacion():
-    ''' Agrega una relacion entre un actor y una pelicula'''
+    ''' Agrega una relación entre un actor y una película '''
     if sistema.usuario_actual is None:
         flash('Debes iniciar sesión para agregar relaciones', 'warning')
         return redirect(url_for('login'))
-    actores_list = []
-    for actor in sistema.actores.values():
-        actores_list.append({
-            'id_estrella': actor.id_estrella,
-            'nombre': actor.nombre
-        })
-        sorted_actores = sorted(actores_list, key=lambda x: x['nombre'])
-    peliculas_list = []
-    for pelicula in sistema.peliculas.values():
-        peliculas_list.append({
-            'id_pelicula' : pelicula.id_pelicula,
-            'titulo': pelicula.titulo_pelicula
-        })
-        sorted_peliculas = sorted(peliculas_list, key=lambda x: x['titulo'])
-    return render_template('agregar_relacion.html', actores=sorted_actores, peliculas=sorted_peliculas)
+    if request.method == 'GET':
+        actores_list=[]
+        for actor in sistema.actores.values():
+            actores_list.append({
+                'id_estrella': actor.id_estrella,
+                'nombre': actor.nombre
+            })
+            sorted_actores = sorted(actores_list, key=lambda x: x['nombre'])
+        peliculas_list=[]
+        for pelicula in sistema.peliculas.values():
+            peliculas_list.append({
+                'id_pelicula': pelicula.id_pelicula,
+                'titulo': pelicula.titulo_pelicula
+            })
+            sorted_peliculas = sorted(peliculas_list, key=lambda x: x['titulo'])
+        return render_template('agregar_relacion.html', actores=sorted_actores, peliculas=sorted_peliculas)
+    if request.method == 'POST':
+        id_actor = int(request.form['actorSelect'])
+        id_pelicula = int(request.form['movieSelect'])
+        personaje  = request.form['character']
+        sistema.agregar_relacion(id_pelicula, id_actor,personaje)
+        sistema.guardar_csv(relaciones_csv,sistema.relaciones)
+        flash('Relación agregada correctamente', 'success')
+        #return redirect(url_for('index'))
+        return redirect(url_for('actor', id_actor=id_actor))
+
+@app.route('/agregar_pelicula', methods=['GET','POST'])
+@app.route('/agregar_peliculas', methods=['GET','POST'])
+def agregar_pelicula():
+    ''' Agrega una película '''
+    if sistema.usuario_actual is None:
+        flash('Debes iniciar sesión para agregar películas', 'warning')
+        return redirect(url_for('login'))
+    if request.method == 'GET':
+        return render_template('agregar_pelicula.html')
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        fecha_lanzamiento = request.form.get('fecha_lanzamiento')
+        url_poster = request.form.get('url_poster')
+        sistema.agregar_pelicula(titulo,fecha_lanzamiento,url_poster)
+        sistema.guardar_csv(peliculas_csv,sistema.peliculas)
+        return redirect(url_for('peliculas'))
 
 if __name__ == '__main__':
     app.run(debug=True)
